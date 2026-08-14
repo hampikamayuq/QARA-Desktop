@@ -5,16 +5,49 @@ edition = "2024"
 description = "Interactive QARA desktop surface for Pop!_OS/COSMIC"
 license = "MIT"
 
+[lib]
+name = "qara_desktop"
+path = "src/lib.rs"
+
+[[bin]]
+name = "qara-desktop"
+path = "src/main.rs"
+
 [dependencies]
-gtk4 = "0.11"
+# GTK do sistema alvo é 4.14 → feature v4_14 (docs/ENVIRONMENT.md).
+gtk4 = { version = "0.11", features = ["v4_14"] }
 gtk4-layer-shell = "0.8"
-webkit6 = "0.6"
+webkit6 = { version = "0.6" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 url = "2"
 anyhow = "1"
+# Logs estruturados exigidos pela SPEC §10 (arquivo em XDG state + stderr).
+tracing = "0.1"
+tracing-subscriber = "0.3"
+# Escrita não bloqueante do log em arquivo.
+tracing-appender = "0.2"
 
 [profile.release]
 lto = "thin"
 codegen-units = 1
 strip = true
+
+# Empacotamento .deb (P2.5) via `cargo deb`.
+# gtk4-layer-shell não tem pacote nos repos Ubuntu 24.04: nas estações da
+# clínica ele vem dos repos Pop!_OS ou é compilado do fonte (ver extended-description).
+[package.metadata.deb]
+maintainer = "Clínica QARA <ti@clinicaqara.com.br>"
+copyright = "2026, Clínica QARA"
+extended-description = """\
+Camada de desktop interativa da Clínica QARA para Pop!_OS/COSMIC (Wayland).
+Requer libgtk4-layer-shell, que não é empacotada no Ubuntu 24.04: em Pop!_OS
+ela vem dos repositórios do sistema; em outras distros, compile do fonte
+(https://github.com/wmww/gtk4-layer-shell) antes de instalar este pacote.
+O autostart por usuário NÃO é instalado pelo pacote: use install/install.sh."""
+depends = "libgtk-4-1, libwebkitgtk-6.0-4"
+section = "x11"
+priority = "optional"
+assets = [
+    ["target/release/qara-desktop", "usr/bin/", "755"],
+]

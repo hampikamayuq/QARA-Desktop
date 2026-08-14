@@ -1,63 +1,71 @@
-//! QARA Desktop native host.
-//!
-//! The first Codex task is to validate exact crate/system-library compatibility
-//! on the target Pop!_OS machine and complete the WebKitGTK integration.
+//! Binário do QARA Desktop: parse de CLI, logging e handoff para `app`.
 
-use anyhow::Result;
-use gtk4 as gtk;
-use gtk::prelude::*;
-use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
+use std::process::ExitCode;
 
-fn main() -> Result<()> {
-    let windowed = std::env::args().any(|arg| arg == "--windowed");
+use qara_desktop::{cli, config, logging, paths};
 
-    let app = gtk::Application::builder()
-        .application_id("br.com.clinicaqara.desktop")
-        .build();
-
-    app.connect_activate(move |app| build_ui(app, windowed));
-    app.run();
-
-    Ok(())
-}
-
-fn build_ui(app: &gtk::Application, windowed: bool) {
-    let window = gtk::ApplicationWindow::builder()
-        .application(app)
-        .title("QARA Desktop")
-        .default_width(1440)
-        .default_height(900)
-        .build();
-
-    if !windowed {
-        if gtk4_layer_shell::is_supported() {
-            window.init_layer_shell();
-            window.set_namespace(Some("qara-desktop"));
-            window.set_layer(Layer::Background);
-            window.set_keyboard_mode(KeyboardMode::None);
-            window.set_exclusive_zone(0);
-            for edge in [Edge::Top, Edge::Right, Edge::Bottom, Edge::Left] {
-                window.set_anchor(edge, true);
-            }
-        } else {
-            eprintln!("QARA Desktop: layer-shell indisponível; use --windowed para depuração.");
+fn main() -> ExitCode {
+    let options = match cli::parse(std::env::args().skip(1)) {
+        Ok(options) => options,
+        Err(message) => {
+            eprintln!("qara-desktop: {message}");
+            return ExitCode::from(2);
         }
+    };
+
+    if options.version {
+        println!("qara-desktop {}", env!("CARGO_PKG_VERSION"));
+        return ExitCode::SUCCESS;
     }
 
-    // TODO(Fase 1):
-    // 1. criar WebKitWebView (webkit6);
-    // 2. carregar ui/index.html por caminho absoluto/canonicalizado;
-    // 3. interceptar navegação externa;
-    // 4. criar bridge tipada para open_url/launch_app;
-    // 5. validar config JSON e allowlist.
-    //
-    // Placeholder deliberado para manter o starter simples antes do diagnóstico
-    // das bibliotecas reais do computador alvo.
-    let label = gtk::Label::new(Some(
-        "QARA Desktop\n\nHost GTK inicializado.\nAbra ui/index.html para visualizar o protótipo."
-    ));
-    label.set_justify(gtk::Justification::Center);
-    window.set_child(Some(&label));
+    if options.check_config {
+        return check_config();
+    }
 
-    window.present();
+    let _log_guard = logging::init(&paths::state_dir());
+    logging::install_panic_hook();
+    tracing::info!(
+        versao = env!("CARGO_PKG_VERSION"),
+        opcoes = ?options,
+        "iniciando QARA Desktop"
+    );
+    logging::log_environment();
+
+    let status = qara_desktop::app::run(options);
+    tracing::info!(status, "encerrando QARA Desktop");
+    ExitCode::from(u8::try_from(status).unwrap_or(1))
+}
+
+/// `--check-config`: valida a config do operador e sai com 0/1.
+/// Saída pensada para operação (sem depender do arquivo de log).
+fn check_config() -> ExitCode {
+    let path = paths::config_file();
+    match std::fs::read_to_string(&path) {
+        Ok(raw) => match config::parse_and_validate(&raw) {
+            Ok(config) => {
+                println!(
+                    "OK: {} válida (perfil \"{}\", {} grupo(s))",
+                    path.display(),
+                    config.profile,
+                    config.groups.len()
+                );
+                ExitCode::SUCCESS
+            }
+            Err(problems) => {
+                eprintln!("ERRO: {} inválida:\n{problems}", path.display());
+                ExitCode::FAILURE
+            }
+        },
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+            println!(
+                "OK: {} ausente; o fallback embutido será usado",
+                path.display()
+            );
+            ExitCode::SUCCESS
+        }
+        Err(e) => {
+            eprintln!("ERRO: falha ao ler {}: {e}", path.display());
+            ExitCode::FAILURE
+        }
+    }
 }
