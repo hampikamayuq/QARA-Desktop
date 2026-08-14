@@ -1,0 +1,75 @@
+{
+  "profile": "reception",
+  "locale": "pt-BR",
+  "groups": [
+    {
+      "id": "attendance",
+      "label": "Atendimento",
+      "items": [
+        {
+          "id": "doctoralia",
+          "label": "Doctoralia",
+          "type": "url",
+          "target": "https://www.doctoralia.com.br/"
+        },
+        {
+          "id": "kommo",
+          "label": "Kommo",
+          "type": "url",
+          "target": "https://www.kommo.com/"
+        },
+        {
+          "id": "whatsapp",
+          "label": "WhatsApp",
+          "type": "url",
+          "target": "https://web.whatsapp.com/"
+        }
+      ]
+    },
+    {
+      "id": "organization",
+      "label": "Organização",
+      "items": [
+        {
+          "id": "gmail",
+          "label": "Gmail",
+          "type": "url",
+          "target": "https://mail.google.com/"
+        },
+        {
+          "id": "calendar",
+          "label": "Agenda",
+          "type": "url",
+          "target": "https://calendar.google.com/"
+        },
+        {
+          "id": "files",
+          "label": "Arquivos",
+          "type": "app",
+          "target": "files"
+        }
+      ]
+    },
+    {
+      "id": "qara",
+      "label": "QARA",
+      "items": [
+        {
+          "id": "qara-site",
+          "label": "Site QARA",
+          "type": "url",
+          "target": "https://clinicaqara.com.br/"
+        },
+        {
+          "id": "qara-crm",
+          "label": "CRM QARA",
+          "type": "url",
+          "target": "https://cliniqara-crm.onrender.com/"
+        }
+      ]
+    }
+  ],
+  "app_allowlist": {
+    "files": ["cosmic-files", "nautilus"]
+  }
+}

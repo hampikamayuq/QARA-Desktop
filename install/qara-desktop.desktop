@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=QARA Desktop
+Comment=Superfície interativa da Clínica QARA
+Exec=/usr/local/bin/qara-desktop
+Terminal=false
+X-GNOME-Autostart-enabled=true
+NoDisplay=true

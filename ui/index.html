@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="color-scheme" content="light" />
+  <title>QARA Desktop</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="desktop-shell">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <section class="brand-panel" aria-label="Clínica QARA">
+      <div class="brand-kicker">CLÍNICA DERMATOLÓGICA</div>
+      <div class="wordmark" aria-label="QARA">QARA</div>
+      <h1>Conhecimento que cuida.<br><span>Presença que transforma.</span></h1>
+      <p class="brand-copy">Precisão dermatológica com presença humana.</p>
+    </section>
+
+    <section class="workspace" aria-label="Atalhos de trabalho">
+      <div class="workspace-header">
+        <div>
+          <span class="eyebrow">ACESSO RÁPIDO</span>
+          <h2>Ferramentas de trabalho</h2>
+        </div>
+        <button id="compact-toggle" class="quiet-button" type="button" aria-pressed="false">Compactar</button>
+      </div>
+
+      <div id="shortcut-groups" class="shortcut-groups" aria-live="polite"></div>
+    </section>
+
+    <footer class="desktop-footer">
+      <div class="location">COPACABANA · RIO DE JANEIRO</div>
+      <div class="clock-block" aria-label="Data e hora">
+        <time id="clock" class="clock">--:--</time>
+        <time id="date" class="date">---</time>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
