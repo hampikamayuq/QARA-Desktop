@@ -1,7 +1,11 @@
+# Este é um arquivo-modelo. O Exec real é escrito por install/install.sh,
+# que resolve o caminho do binário instalado (ex.: ~/.local/bin/qara-desktop)
+# e copia o resultado para ~/.config/autostart/qara-desktop.desktop.
 [Desktop Entry]
 Type=Application
 Name=QARA Desktop
 Comment=Superfície interativa da Clínica QARA
+Icon=qara-desktop
 Exec=/usr/local/bin/qara-desktop
 Terminal=false
 X-GNOME-Autostart-enabled=true

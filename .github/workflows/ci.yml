@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar dependências de sistema (apt)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            libgtk-4-dev \
+            libwebkitgtk-6.0-dev \
+            meson \
+            ninja-build \
+            libwayland-dev \
+            wayland-protocols \
+            shellcheck
+
+      - name: Compilar e instalar gtk4-layer-shell do fonte
+        run: |
+          git clone --depth 1 https://github.com/wmww/gtk4-layer-shell.git /tmp/gtk4-layer-shell
+          cd /tmp/gtk4-layer-shell
+          # introspection/vapi desnecessários para o crate Rust (só a lib C + .pc)
+          meson setup build -Dexamples=false -Ddocs=false -Dtests=false \
+            -Dsmoke-tests=false -Dintrospection=false -Dvapi=false
+          ninja -C build
+          sudo ninja -C build install
+          sudo ldconfig
+
+      - name: shellcheck nos scripts
+        run: shellcheck scripts/*.sh install/*.sh
+
+      - name: Instalar toolchain Rust (rust-toolchain.toml)
+        run: |
+          rustup show
+          rustup component add rustfmt clippy
+
+      - name: Cache do cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: cargo fmt --check
+        run: cargo fmt --all --check
+
+      - name: cargo clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: cargo test
+        run: cargo test
+
+      - name: cargo build --release
+        run: cargo build --release

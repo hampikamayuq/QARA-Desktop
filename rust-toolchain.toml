@@ -1,0 +1,16 @@
+# Fixa a toolchain via rustup.
+#
+# O Cargo.toml usa `edition = "2024"`, que exige Rust >= 1.85. O `rustc`
+# distribuído pelos repositórios apt do Pop!_OS 24.04 é mais antigo que isso,
+# então a máquina alvo precisa instalar o Rust via rustup (não pelo apt) para
+# que este arquivo seja respeitado automaticamente.
+#
+# Instalação do rustup, se necessário:
+#   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#
+# Com o rustup instalado, basta rodar `cargo build`/`cargo check` dentro do
+# repositório: o rustup detecta este arquivo e baixa/usa automaticamente a
+# toolchain "stable" declarada abaixo.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]
