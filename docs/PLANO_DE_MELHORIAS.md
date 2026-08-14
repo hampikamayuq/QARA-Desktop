@@ -1,5 +1,7 @@
 # QARA Desktop — Plano de Melhorias
 
+> **Status (2026-08-14):** P0, P1 e os itens de código de P2/P3 foram implementados neste repositório (ver histórico da branch). Permanecem pendentes apenas os itens que exigem a máquina Pop!_OS/COSMIC real: preencher `docs/ENVIRONMENT.md` via `scripts/diagnose.sh`, validar o comportamento layer-shell (Background, sem Alt+Tab, hotplug de monitores, escala 100–200%), medir CPU/memória em idle (SPEC §8/§12) e gerar o `.deb` com `cargo deb`. Widgets agregados (Fase 5) seguem como trabalho futuro.
+
 Data: 2026-08-14
 Base analisada: `qara-desktop-starter` (SPEC v0.1, protótipo `ui/`, esqueleto `src/main.rs`, scripts e configuração).
 

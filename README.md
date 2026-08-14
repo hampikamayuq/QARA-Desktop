@@ -2,67 +2,79 @@
 
 Desktop interativo institucional para computadores da Clínica QARA em Pop!_OS/COSMIC.
 
-## Objetivo
+Transforma o fundo do desktop em uma superfície QARA limpa e interativa (camada Wayland de background via layer-shell), com atalhos para ferramentas de trabalho — sem reproduzir um desktop convencional cheio de ícones.
 
-Transformar o fundo do desktop em uma superfície QARA limpa e interativa, com atalhos para ferramentas de trabalho sem reproduzir um desktop convencional cheio de ícones.
+## Arquitetura
 
-O projeto separa:
+- **Host nativo** (`src/`): Rust + GTK4 + `gtk4-layer-shell` + WebKitGTK 6. Serve a UI por scheme local `qara://`, valida a configuração, executa ações por allowlist e escreve logs.
+- **UI** (`ui/`): HTML/CSS/JavaScript puros, carregados na WebView. Conversa com o host apenas pelo protocolo tipado de `docs/PROTOCOL.md`.
+- **Configuração** (`config/`): JSON declarativo por estação (`~/.config/qara-desktop/config.json`), com perfis de exemplo em `config/profiles/`.
+- **Segurança**: a página nunca executa shell. O host aceita somente ações fechadas (`open_url`, `launch_app`, `get_system_info`, `set_ui_preference`) resolvidas por ID contra a config validada. Detalhes em `docs/PROTOCOL.md` e `docs/DECISIONS.md`.
 
-- **host nativo**: GTK4 + `gtk4-layer-shell` + WebKitGTK 6;
-- **UI**: HTML/CSS/JavaScript;
-- **configuração**: atalhos declarativos em JSON;
-- **segurança**: execução local exclusivamente por allowlist.
+## Compilar e rodar
+
+Pré-requisitos (Pop!_OS/Ubuntu 24.04):
+
+```bash
+./scripts/diagnose.sh              # confirma ambiente (registre em docs/ENVIRONMENT.md)
+./scripts/install-deps-popos.sh    # GTK4, WebKitGTK 6, layer-shell (ou instrução de build do fonte)
+# Rust via rustup (o rustc do apt é antigo demais para edition 2024):
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Desenvolvimento:
+
+```bash
+cargo run -- --windowed            # janela normal, para depuração
+cargo run -- --windowed --devtools # com inspetor WebKit
+cargo run -- --ui-dir ui           # UI carregada do disco em vez dos assets embutidos
+cargo run -- --check-config        # valida a config e sai (0/1)
+```
+
+Produção (na máquina COSMIC): rode sem flags para o modo layer-shell (background em todos os monitores) e instale com:
+
+```bash
+./install/install.sh               # binário em ~/.local/bin + autostart (--no-autostart para pular)
+./install/uninstall.sh             # remove tudo, preserva a config do usuário
+```
+
+## Preview da UI sem host
+
+```bash
+./scripts/run-preview.sh           # http://localhost:8080 (modo degradado, sem bridge)
+```
+
+## Configuração
+
+`~/.config/qara-desktop/config.json` (fallback: `config/shortcuts.example.json`, embutido no binário). Perfis prontos por estação em `config/profiles/{reception,clinical,admin}.json`. O arquivo é observado: edições válidas recarregam a UI ao vivo; inválidas são logadas e ignoradas.
+
+Logs: `~/.local/state/qara-desktop/qara-desktop.log`.
+
+## Qualidade
+
+```bash
+cargo fmt --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test                         # 52 testes (config, bridge, launcher, prefs, CLI)
+```
+
+A CI (`.github/workflows/ci.yml`) roda tudo isso em ubuntu-24.04, compilando o gtk4-layer-shell do fonte (não há pacote Ubuntu). A UI tem verificação Playwright documentada no histórico do repositório.
 
 ## Identidade visual
 
-Tokens oficiais do design system QARA:
+Tokens oficiais QARA em `ui/styles.css` e SPEC §5. Diretriz: clínica contemporânea, clara, silenciosa e médica — sem dourado ornamental, sem estética de spa (lista completa de "evitar" em `AGENTS.md`).
 
-- Graphite: `#404041`
-- Ink: `#29292A`
-- Taupe: `#A28A7F`
-- Taupe deep: `#796960`
-- Blush: `#FDE6DC`
-- Blush soft: `#FFF1EB`
-- Gray 050: `#F1F1F2`
-- Gray 200: `#D0D2D3`
-- Copy: `#5F5F61`
-- White: `#FFFFFF`
-- Focus: `#735F56`
+## Privacidade
 
-Diretriz: clínica contemporânea, clara, silenciosa e médica. Não transformar a interface em estética de spa; evitar dourado ornamental.
+O wallpaper é visível a terceiros: nunca exibir nomes de pacientes, telefones, diagnósticos ou conversas (SPEC §7, ADR-003). Widgets futuros mostram apenas agregados.
 
-## Estado do starter
+## Documentos
 
-Este pacote contém:
-
-1. especificação técnica (`SPEC.md`);
-2. instruções para Codex (`AGENTS.md` e `CODEX_PROMPT.md`);
-3. protótipo web funcional (`ui/`);
-4. esqueleto do host Rust (`src/main.rs`);
-5. configuração inicial de atalhos (`config/shortcuts.example.json`);
-6. diagnóstico do ambiente (`scripts/diagnose.sh`);
-7. instalador de dependências base (`scripts/install-deps-popos.sh`);
-8. autostart (`install/qara-desktop.desktop`).
-
-## Primeiro passo no computador Pop!_OS
-
-```bash
-chmod +x scripts/*.sh
-./scripts/diagnose.sh
-```
-
-Depois abra o projeto no Codex e use `CODEX_PROMPT.md` como tarefa inicial.
-
-## Preview da UI
-
-Antes do host nativo estar pronto:
-
-```bash
-python3 -m http.server 8080 -d ui
-```
-
-Abra `http://localhost:8080`.
-
-## Princípio de segurança
-
-A página HTML nunca recebe acesso arbitrário ao shell. O host aceita somente ações conhecidas e configuradas, por exemplo `open_url`, `launch_app` e, futuramente, ações internas do CRM. Nenhum conteúdo remoto pode injetar comandos locais.
+| Documento | Conteúdo |
+|-----------|----------|
+| `SPEC.md` | Especificação técnica completa |
+| `docs/PROTOCOL.md` | Contrato host ↔ UI (bridge v1) |
+| `docs/DECISIONS.md` | ADRs |
+| `docs/PLANO_DE_MELHORIAS.md` | Plano executado e pendências |
+| `docs/ENVIRONMENT.md` | Diagnóstico da máquina alvo (preencher) |
+| `AGENTS.md` | Guia para agentes/contribuidores |
