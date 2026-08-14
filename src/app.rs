@@ -30,6 +30,8 @@ use crate::{cli, paths};
 const UI_INDEX_HTML: &[u8] = include_bytes!("../ui/index.html");
 const UI_STYLES_CSS: &[u8] = include_bytes!("../ui/styles.css");
 const UI_APP_JS: &[u8] = include_bytes!("../ui/app.js");
+const UI_FAVICON_SVG: &[u8] = include_bytes!("../ui/favicon.svg");
+const UI_WALLPAPER_WEBP: &[u8] = include_bytes!("../ui/assets/wallpaper.webp");
 
 const UI_ENTRY_URI: &str = "qara://ui/index.html";
 /// Debounce do watcher de config.
@@ -422,6 +424,8 @@ fn resolve_ui_asset(uri: &str, ui_dir: Option<&Path>) -> Option<(Vec<u8>, &'stat
                 "index.html" => UI_INDEX_HTML,
                 "styles.css" => UI_STYLES_CSS,
                 "app.js" => UI_APP_JS,
+                "favicon.svg" => UI_FAVICON_SVG,
+                "assets/wallpaper.webp" => UI_WALLPAPER_WEBP,
                 _ => return None,
             };
             Some((body.to_vec(), content_type_for(name)))

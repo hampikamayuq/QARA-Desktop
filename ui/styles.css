@@ -37,11 +37,16 @@ button, a { font: inherit; }
   grid-template-columns: minmax(360px, 1.15fr) minmax(390px, .85fr);
   grid-template-rows: 1fr auto;
   gap: 44px 72px;
-  background:
-    radial-gradient(circle at 86% 18%, rgba(253, 230, 220, .72), transparent 31%),
-    linear-gradient(115deg, #fff 0%, #fff 53%, #fff9f6 100%);
+  /* Arte institucional oficial (ADR-007); cor de fallback enquanto carrega. */
+  background: #ece3d9 url('assets/wallpaper.webp') center / cover no-repeat;
   isolation: isolate;
 }
+
+/* A arte de fundo já traz wordmark, kicker, tagline e localização —
+   os equivalentes em HTML ficam ocultos para não duplicar a marca. */
+.ambient,
+.brand-panel,
+.location { display: none; }
 
 .ambient {
   position: absolute;
@@ -111,11 +116,12 @@ button, a { font: inherit; }
 .workspace {
   align-self: center;
   width: min(100%, 600px);
-  justify-self: end;
+  /* Ocupa a área vazia à esquerda da arte; a composição da marca fica à direita. */
+  justify-self: start;
   padding: 30px;
-  border: 1px solid rgba(208, 210, 211, .86);
+  border: 1px solid rgba(162, 138, 127, .32);
   border-radius: var(--radius-surface);
-  background: rgba(255,255,255,.84);
+  background: rgba(255, 253, 250, .88);
   box-shadow: var(--shadow-ambient);
   backdrop-filter: blur(16px);
 }
@@ -212,13 +218,10 @@ button, a { font: inherit; }
   grid-column: 1 / -1;
   align-self: end;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: end;
-  padding-top: 24px;
-  border-top: 1px solid rgba(208,210,211,.74);
 }
-.location { color: var(--qara-gray-600); }
-.clock-block { text-align: right; }
+.clock-block { text-align: left; }
 .clock {
   display: block;
   font-family: Telegraf, Arial, sans-serif;

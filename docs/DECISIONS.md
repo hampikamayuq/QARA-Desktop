@@ -49,3 +49,9 @@ O contrato host ↔ UI está em `docs/PROTOCOL.md`: mensagens JSON versionadas (
 **Status:** accepted
 
 Em modo layer-shell a janela usa `KeyboardMode::None`: um wallpaper interativo não deve disputar foco de teclado com as janelas de trabalho da recepção. Consequência aceita: navegação por teclado e os estilos `:focus-visible` da UI só operam em `--windowed` (desenvolvimento). Se surgir demanda real de acessibilidade por teclado no desktop, reavaliar `KeyboardMode::OnDemand` em novo ADR.
+
+## ADR-007 — Arte institucional oficial como fundo
+
+**Status:** accepted
+
+O fundo do desktop usa a arte oficial da marca QARA (`ui/assets/wallpaper.webp`, fornecida pela clínica, otimizada de PNG 1,7 MB para WebP ~60 KB), embutida no binário e servida via `qara://ui/assets/wallpaper.webp`. Como a arte já contém wordmark, kicker, tagline e localização, os equivalentes em HTML (`.brand-panel`, `.location`, formas `.ambient`) ficam ocultos por CSS — o markup e o `config.branding` permanecem no código para permitir reverter a um fundo neutro sem retrabalho. O launcher ocupa a área vazia à esquerda da composição. Nota: a diretriz "evitar dourado ornamental" de AGENTS.md vale para elementos de UI criados por nós; a arte oficial da marca, fornecida pela clínica, prevalece.
