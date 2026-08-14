@@ -65,16 +65,16 @@
       "label": "QARA",
       "items": [
         {
-          "id": "qara-site",
-          "label": "Site QARA",
-          "type": "url",
-          "target": "https://clinicaqara.com.br/"
-        },
-        {
           "id": "qara-crm",
           "label": "CRM QARA",
           "type": "url",
           "target": "https://cliniqara-crm.onrender.com/"
+        },
+        {
+          "id": "qara-site",
+          "label": "Site QARA",
+          "type": "url",
+          "target": "https://clinicaqara.com.br/"
         }
       ]
     }

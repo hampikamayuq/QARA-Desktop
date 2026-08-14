@@ -1,5 +1,5 @@
 {
-  "profile": "reception",
+  "profile": "clinical",
   "locale": "pt-BR",
   "branding": {
     "kicker": "CLÍNICA DERMATOLÓGICA",
@@ -13,44 +13,32 @@
   },
   "groups": [
     {
-      "id": "attendance",
-      "label": "Atendimento",
+      "id": "agenda",
+      "label": "Agenda",
       "items": [
-        {
-          "id": "doctoralia",
-          "label": "Doctoralia",
-          "type": "url",
-          "target": "https://www.doctoralia.com.br/"
-        },
-        {
-          "id": "kommo",
-          "label": "Kommo",
-          "type": "url",
-          "target": "https://www.kommo.com/"
-        },
-        {
-          "id": "whatsapp",
-          "label": "WhatsApp",
-          "type": "url",
-          "target": "https://web.whatsapp.com/"
-        }
-      ]
-    },
-    {
-      "id": "organization",
-      "label": "Organização",
-      "items": [
-        {
-          "id": "gmail",
-          "label": "Gmail",
-          "type": "url",
-          "target": "https://mail.google.com/"
-        },
         {
           "id": "calendar",
           "label": "Agenda",
           "type": "url",
           "target": "https://calendar.google.com/"
+        },
+        {
+          "id": "doctoralia",
+          "label": "Doctoralia",
+          "type": "url",
+          "target": "https://www.doctoralia.com.br/"
+        }
+      ]
+    },
+    {
+      "id": "clinical-tools",
+      "label": "Atendimento clínico",
+      "items": [
+        {
+          "id": "qara-crm",
+          "label": "Prontuário / CRM",
+          "type": "url",
+          "target": "https://cliniqara-crm.onrender.com/"
         },
         {
           "id": "files",
@@ -69,12 +57,6 @@
           "label": "Site QARA",
           "type": "url",
           "target": "https://clinicaqara.com.br/"
-        },
-        {
-          "id": "qara-crm",
-          "label": "CRM QARA",
-          "type": "url",
-          "target": "https://cliniqara-crm.onrender.com/"
         }
       ]
     }

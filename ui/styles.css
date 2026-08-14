@@ -97,7 +97,9 @@ button, a { font: inherit; }
   line-height: 1.05;
   letter-spacing: -.045em;
 }
-.brand-panel h1 span { color: var(--qara-taupe-deep); }
+/* Linhas da headline: uma por entrada de `branding.headline`; a última recebe o acento taupe. */
+.headline-line { display: block; }
+.headline-line--accent { color: var(--qara-taupe-deep); }
 .brand-copy {
   max-width: 520px;
   margin: 28px 0 0;
@@ -180,12 +182,29 @@ button, a { font: inherit; }
   border-color: var(--qara-taupe);
   background: var(--qara-blush-soft);
 }
+/* Fallback para IDs sem ícone conhecido. */
 .shortcut-mark {
   width: 28px;
   height: 3px;
   border-radius: 999px;
   background: var(--qara-taupe);
 }
+
+/* Ícone monocromático de linha; herda a cor via currentColor. */
+.shortcut-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  color: var(--qara-taupe);
+  transition: color 160ms ease;
+}
+.shortcut-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.shortcut:hover .shortcut-icon,
+.shortcut:focus-visible .shortcut-icon { color: var(--qara-taupe-deep); }
 .shortcut-label { font-size: .92rem; font-weight: 600; }
 .shortcut-type { font-size: .68rem; color: var(--qara-gray-600); }
 
@@ -235,6 +254,7 @@ body.compact .shortcut-groups { gap: 14px; }
 body.compact .group-items { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 body.compact .shortcut { min-height: 58px; }
 body.compact .shortcut-type { display: none; }
+body.compact .shortcut-icon { width: 19px; height: 19px; }
 
 @media (max-width: 1100px) {
   .desktop-shell { gap: 34px; padding: 42px; }

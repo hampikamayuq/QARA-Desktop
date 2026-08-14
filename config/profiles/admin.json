@@ -1,5 +1,5 @@
 {
-  "profile": "reception",
+  "profile": "admin",
   "locale": "pt-BR",
   "branding": {
     "kicker": "CLÍNICA DERMATOLÓGICA",
@@ -13,15 +13,9 @@
   },
   "groups": [
     {
-      "id": "attendance",
-      "label": "Atendimento",
+      "id": "commercial",
+      "label": "Comercial",
       "items": [
-        {
-          "id": "doctoralia",
-          "label": "Doctoralia",
-          "type": "url",
-          "target": "https://www.doctoralia.com.br/"
-        },
         {
           "id": "kommo",
           "label": "Kommo",
@@ -29,10 +23,10 @@
           "target": "https://www.kommo.com/"
         },
         {
-          "id": "whatsapp",
-          "label": "WhatsApp",
+          "id": "qara-crm",
+          "label": "CRM QARA",
           "type": "url",
-          "target": "https://web.whatsapp.com/"
+          "target": "https://cliniqara-crm.onrender.com/"
         }
       ]
     },
@@ -69,12 +63,6 @@
           "label": "Site QARA",
           "type": "url",
           "target": "https://clinicaqara.com.br/"
-        },
-        {
-          "id": "qara-crm",
-          "label": "CRM QARA",
-          "type": "url",
-          "target": "https://cliniqara-crm.onrender.com/"
         }
       ]
     }

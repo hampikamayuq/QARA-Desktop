@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="QARA">
+  <title>QARA</title>
+  <rect width="128" height="128" rx="26" fill="#FFF1EB"/>
+  <circle cx="62" cy="61" r="27" fill="none" stroke="#404041" stroke-width="10"/>
+  <path d="M70 69 L94 93" fill="none" stroke="#404041" stroke-width="10" stroke-linecap="round"/>
+</svg>
